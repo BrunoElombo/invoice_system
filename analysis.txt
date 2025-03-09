@@ -1,0 +1,7 @@
+ENTITIES:
+USER: The user has information that will help him access the system
+ROLE: The user has roles
+PERMISSION: a user can have one or various permissions, the role can contain zero or many permissions
+QUOTE: The user can request a quote
+INVOICE: The user receives an invoice. The invoice can have discounts 
+INVOICE ITEM: The invoice has one or various items
