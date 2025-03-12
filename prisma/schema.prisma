@@ -14,7 +14,8 @@ model user {
   id        String   @id    @default(uuid())
   username  String   @unique
   email     String   @unique
-  password  String
+  password  String?
+  gender    GENDER
   roles      role[]
   permissions    permission[]
   invoices       invoice[]
@@ -27,10 +28,11 @@ model user {
 model role{
   id    String    @id   @default(uuid())
   name  String    @unique
-  displayName     String    @unique
-  description     String
+  displayName     String?    @unique
+  description     String?
   users      user[]
   permissions permission[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -38,10 +40,11 @@ model role{
 model permission{
   id    String   @id    @default(uuid())
   name  String   @unique
-  displayName    String @unique
-  description    String
+  displayName    String? @unique
+  description    String?
   roles       role[]
   users       user[]
+
   createdAt   DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
@@ -49,8 +52,8 @@ model permission{
 model invoice{
   id    String    @id   @default(uuid())
   name  String    @unique
-  displayName     String    @unique
-  description     String
+  displayName     String?    @unique
+  description     String?
   invoiceItems    invoice_item[]
   users           user[]
 
@@ -61,11 +64,11 @@ model invoice{
 model invoice_item{
   id    String    @id   @default(uuid())
   name  String    @unique
-  displayName     String    @unique
-  code   String   @unique
-  price  Float
-  discount Float
-  description     String
+  displayName     String?    @unique
+  code   String?   @unique
+  price  Float     @default(0.0)
+  discount Float   @default(0.0)
+  description     String?
   invoices        invoice[]
 
   createdAt       DateTime  @default(now())
@@ -74,9 +77,14 @@ model invoice_item{
 
 model quote{
   id    String    @id   @default(uuid())
-  description     String
+  description     String?
   users           user[]
 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+}
+
+enum GENDER{
+  MALE
+  FEMALE
 }
