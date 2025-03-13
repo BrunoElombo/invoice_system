@@ -34,16 +34,13 @@ export const getAllPermissionsService = async(body) =>{
 
     try {
         let permissions = await permissionClient.findMany({
-            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
                 createdAt:'desc'
             }
         });
-        const total = await permissionClient.count({
-            where:{isActive:true}
-        });
+        const total = await permissionClient.count({});
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -64,7 +61,7 @@ export const getAllPermissionsService = async(body) =>{
 export const getPermissionByIdService = async(id) =>{
     try {
         let invoice = await permissionClient.findFirst({
-            where:{id, isActive: true},
+            where:{id},
         });
         if (!invoice) throw new Error(`No permission found.`)
         return invoice;
@@ -91,9 +88,7 @@ export const getPermissionsByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await permissionClient.count({
-            where:{isActive:true}
-        });;
+        const total = await permissionClient.count();
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
@@ -132,10 +127,7 @@ export const updatePermissionService = async (id, body) =>{
  */
 export const deletePermissionServices = async (id) =>{
     try {
-        let permission = await permissionClient.update({
-            where: {id},
-            data:{isActive:false}
-        });
+        let permission = await permissionClient.delete({where: {id}});
         return permission
     } catch (error) {
         console.log(error);

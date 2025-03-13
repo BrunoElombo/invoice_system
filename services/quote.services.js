@@ -41,9 +41,7 @@ export const getAllInvoicesService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await quoteClient.count({
-            where:{isActive:true}
-        });
+        const total = await quoteClient.count();
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -64,7 +62,7 @@ export const getAllInvoicesService = async(body) =>{
 export const getQuotesByIdService = async(id) =>{
     try {
         let quote = await quoteClient.findFirst({
-            where:{id, isActive: true},
+            where:{id},
         });
         if (!quote) throw new Error(`No application found.`)
         return quote;
@@ -91,9 +89,7 @@ export const getQuotesByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await quoteClient.count({
-            where:{isActive:true}
-        });;
+        const total = await quoteClient.count();
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
@@ -132,10 +128,7 @@ export const updateQuoteService = async (id, body) =>{
  */
 export const deleteQuoteServices = async (id) =>{
     try {
-        let quote = await quoteClient.update({
-            where: {id},
-            data:{isActive:false}
-        });
+        let quote = await quoteClient.delete({where: {id}});
         return quote
     } catch (error) {
         console.log(error);

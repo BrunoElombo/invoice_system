@@ -34,16 +34,13 @@ export const getAllRolesService = async(body) =>{
 
     try {
         let roles = await roleClient.findMany({
-            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
                 createdAt:'desc'
             }
         });
-        const total = await roleClient.count({
-            where:{isActive:true}
-        });
+        const total = await roleClient.count();
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -64,7 +61,7 @@ export const getAllRolesService = async(body) =>{
 export const getRoleByIdService = async(id) =>{
     try {
         let role = await roleClient.findFirst({
-            where:{id, isActive: true},
+            where:{id},
         });
         if (!role) throw new Error(`No role found.`)
         return role;
@@ -91,9 +88,7 @@ export const getRolesByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await roleClient.count({
-            where:{isActive:true}
-        });;
+        const total = await roleClient.count();
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
@@ -132,10 +127,7 @@ export const updateRoleService = async (id, body) =>{
  */
 export const deleteRoleServices = async (id) =>{
     try {
-        let role = await roleClient.update({
-            where: {id},
-            data:{isActive:false}
-        });
+        let role = await roleClient.delete({where: {id}});
         return role
     } catch (error) {
         console.log(error);

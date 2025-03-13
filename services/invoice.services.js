@@ -34,16 +34,13 @@ export const getAllInvoicesService = async(body) =>{
 
     try {
         let invoices = await invoiceClient.findMany({
-            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
                 createdAt:'desc'
             }
         });
-        const total = await invoiceClient.count({
-            where:{isActive:true}
-        });
+        const total = await invoiceClient.count({});
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -64,7 +61,7 @@ export const getAllInvoicesService = async(body) =>{
 export const getInvoiceByIdService = async(id) =>{
     try {
         let invoice = await invoiceClient.findFirst({
-            where:{id, isActive: true},
+            where:{id}
         });
         if (!invoice) throw new Error(`No application found.`)
         return invoice;
@@ -91,9 +88,7 @@ export const getInvoicesByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await invoiceClient.count({
-            where:{isActive:true}
-        });;
+        const total = await invoiceClient.count();
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
@@ -132,9 +127,8 @@ export const updateInvoiceService = async (id, body) =>{
  */
 export const deleteInvoiceServices = async (id) =>{
     try {
-        let invoice = await invoiceClient.update({
-            where: {id},
-            data:{isActive:false}
+        let invoice = await invoiceClient.delete({
+            where: {id}
         });
         return invoice
     } catch (error) {

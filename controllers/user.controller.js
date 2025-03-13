@@ -23,7 +23,9 @@ export const createUserController = async (req, res) => {
         return;
     } catch (error) {
         console.log(error);
-        res.sendStatus(HTTP_STATUS.BAD_REQUEST.statusCode);
+        res
+        .status(HTTP_STATUS.BAD_REQUEST.statusCode)
+        .send(error)
         return
     }
 }
